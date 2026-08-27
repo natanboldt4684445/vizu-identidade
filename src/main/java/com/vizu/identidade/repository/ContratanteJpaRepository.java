@@ -1,0 +1,1 @@
+package com.vizu.identidade.repository; import com.vizu.identidade.model.entity.Contratante; import java.util.*; import org.springframework.data.jpa.repository.JpaRepository; public interface ContratanteJpaRepository extends JpaRepository<Contratante,UUID>{}

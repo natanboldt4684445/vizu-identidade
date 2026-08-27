@@ -1,0 +1,1 @@
+package com.vizu.identidade.repository; import com.vizu.identidade.model.entity.Loja; import java.util.*; import org.springframework.data.jpa.repository.JpaRepository; public interface LojaJpaRepository extends JpaRepository<Loja,UUID>{ List<Loja> findByContratanteIdOrderByNome(UUID contratanteId); Optional<Loja> findByIdAndContratanteId(UUID id,UUID contratanteId); }

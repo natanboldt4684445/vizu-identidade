@@ -1,0 +1,1 @@
+package com.vizu.identidade.repository; import com.vizu.identidade.model.entity.Funcionario; import java.util.*; import org.springframework.data.jpa.repository.JpaRepository; public interface FuncionarioJpaRepository extends JpaRepository<Funcionario,UUID>{ List<Funcionario> findByContratanteIdOrderByNome(UUID contratanteId); }

@@ -1,0 +1,1 @@
+package com.vizu.identidade.repository; import com.vizu.identidade.model.entity.Perfil; import java.util.*; import org.springframework.data.jpa.repository.JpaRepository; public interface PerfilJpaRepository extends JpaRepository<Perfil,UUID>{}

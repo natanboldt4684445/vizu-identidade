@@ -1,0 +1,17 @@
+package com.vizu.identidade.cadastro;
+import com.vizu.identidade.cadastro.service.PessoasService; import com.vizu.identidade.shared.security.TenantContext; import jakarta.validation.Valid; import jakarta.validation.constraints.*; import java.util.*; import org.springframework.http.HttpStatus; import org.springframework.security.access.prepost.PreAuthorize; import org.springframework.security.core.annotation.AuthenticationPrincipal; import org.springframework.security.oauth2.jwt.Jwt; import org.springframework.web.bind.annotation.*;
+@RestController public class PessoasController {
+ private final PessoasService service;private final TenantContext tenant;public PessoasController(PessoasService s,TenantContext t){service=s;tenant=t;}
+ @GetMapping("/funcionarios") @PreAuthorize("hasAuthority('SCOPE_identidade.funcionario.visualizar')") public List<Map<String,Object>> employees(@AuthenticationPrincipal Jwt j){return service.employees(tenant.tenantId(j));}
+ @PostMapping("/funcionarios")@ResponseStatus(HttpStatus.CREATED)@PreAuthorize("hasAuthority('SCOPE_identidade.funcionario.criar')")public Id createEmployee(@AuthenticationPrincipal Jwt j,@Valid@RequestBody EmployeeRequest x){return service.createEmployee(tenant.tenantId(j),x);}
+ @GetMapping("/funcionarios/{id}")public Map<String,Object> employee(@AuthenticationPrincipal Jwt j,@PathVariable UUID id){return service.employee(id,tenant.tenantId(j));}
+ @PatchMapping("/funcionarios/{id}")public void updateEmployee(@AuthenticationPrincipal Jwt j,@PathVariable UUID id,@Valid@RequestBody EmployeeRequest x){service.updateEmployee(id,tenant.tenantId(j),x);}
+ @PutMapping("/funcionarios/{id}/lojas")public void stores(@AuthenticationPrincipal Jwt j,@PathVariable UUID id,@Valid@RequestBody Ids x){service.stores(id,tenant.tenantId(j),x);}
+ @PostMapping("/funcionarios/{id}/{action:desativar|reativar}")public void employeeActive(@AuthenticationPrincipal Jwt j,@PathVariable UUID id,@PathVariable String action){service.employeeActive(id,tenant.tenantId(j),action.equals("reativar"));}
+ @GetMapping("/clientes")@PreAuthorize("hasAuthority('SCOPE_identidade.cliente.visualizar')")public List<Map<String,Object>> clients(@AuthenticationPrincipal Jwt j){return service.clients(tenant.tenantId(j));}
+ @PostMapping("/clientes")@ResponseStatus(HttpStatus.CREATED)@PreAuthorize("hasAuthority('SCOPE_identidade.cliente.criar')")public Id createClient(@AuthenticationPrincipal Jwt j,@Valid@RequestBody ClientRequest x){return service.createClient(tenant.tenantId(j),x);}
+ @GetMapping("/clientes/{id}")public Map<String,Object> client(@AuthenticationPrincipal Jwt j,@PathVariable UUID id){return service.client(id,tenant.tenantId(j));}
+ @PatchMapping("/clientes/{id}")public void updateClient(@AuthenticationPrincipal Jwt j,@PathVariable UUID id,@Valid@RequestBody ClientRequest x){service.updateClient(id,tenant.tenantId(j),x);}
+ @PostMapping("/clientes/{id}/{action:desativar|reativar}")public void clientActive(@AuthenticationPrincipal Jwt j,@PathVariable UUID id,@PathVariable String action){service.clientActive(id,tenant.tenantId(j),action.equals("reativar"));}
+ public record Id(UUID id){} public record Ids(@NotNull List<UUID> ids){} public record EmployeeRequest(@NotBlank String nome,@DecimalMin("0.0")@DecimalMax("100.0")java.math.BigDecimal comissaoPercentual,String bio,boolean exibirNoSite){} public record ClientRequest(@NotBlank String nome,@NotBlank String telefone,@Email String email){}
+}

@@ -1,0 +1,3 @@
+package com.vizu.identidade.model.entity;
+import jakarta.persistence.*; import java.util.UUID;
+@Entity @Table(schema="identidade",name="usuario") public class Usuario { @Id @Column(name="usuario_id") private UUID id; @Column(name="contratante_id") private UUID contratanteId; private String nome; private String email; private String telefone; private boolean ativo; @Column(name="recebe_notificacao") private boolean recebeNotificacao; @Column(name="authz_version") private int authzVersion; protected Usuario(){} public UUID getId(){return id;} public UUID getContratanteId(){return contratanteId;} public String getEmail(){return email;} }
